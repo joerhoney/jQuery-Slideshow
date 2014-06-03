@@ -339,6 +339,32 @@
             return this;
         },
 
+        // CustomCSS should add/remove certain classes upon transition (no style attribute changes).
+        customcss: function() {
+            var self = this;
+
+            this.$items
+                .filter(function(i) {
+                    return i !== (self.opts.offset - 1);
+                })
+                .removeClass('currentslide');
+
+            this.execute = function() {
+                var $next = this.$items.eq(this.future);
+                var $current = this.$items.eq(this.current).addClass('currentslide');
+
+                $next.addClass('currentslide');
+
+                $current.removeClass('currentslide');
+            };
+
+            this.teardown = function() {
+                this.$items.stop(true, true).removeClass('currentslide');
+            };
+
+            return this;
+        },
+
         // Scroll
         scroll: function() {
             var self = this;
